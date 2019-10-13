@@ -113,11 +113,47 @@ def operation():
     # Add another dataframe on the bottom
     S = pd.DataFrame(np.random.rand(4, 6), index=list('EFGH'), columns=list('abcdef'))
     a = a.append(S)
-    # 切片 take b and e column
+
+    # Take b and e column
     col_b_e= a[['b','e']]
     print(col_b_e)
     # Take row 'A'-'D' and column 'a','c','f'
     square_AD_acf = a.loc['A':'D',['a','c','f']]
+
+    # remove hang and column
+    a = a.drop(['C', 'D'])
+    # remove hang and column
+    # axis = 0 represent hang, and axis = 1 represent column
+    a = a.drop('a',axis=1)
+
+    # 缺省值处理
+    a.iloc[2, 3] = None  # 取第三行第4列值设为NaN
+    a.iloc[4, 0] = None  # 取第五行第1列值设为NaN
+    a = a.fillna(5)  # 缺省值处(即NaN处填充为5)
+
+    # 缺省值去行即有缺省值的把这一行都去掉
+    a.iloc[2, 3] = None
+    a.iloc[4, 0] = None
+    a = a.dropna()  # 删除缺省值为NaN的行
+
+
+def read_excel():
+    path_excel = 'csv_test.xlsx'
+    # 读取excel,适当改动后，保存到excel中
+    e1=pd.read_excel(path_excel,sheetname='Sheet1')
+    print(e1)
+    e1.columns=['class','no','name','sex','dormitory','phonenumber']
+    print(e1)
+    print(e1.ix[2])
+    print(e1['class'])
+    print(e1.sex)
+    # 可将取出的数据处理，处理完后再保存到excel中去
+    e2 = pd.read_excel('csv_test.xlsx', sheetname='Sheet1', names='table1')
+    e2.columns = ['class','no','name','sex','dormitory','phonenumber']
+    print(e2)
+    e2.to_excel('test_write.xlsx', header=False, index=False)
+
+
     
 
 
@@ -147,3 +183,4 @@ if __name__ == "__main__":
     # print(s1)
     # attach_value()
     operation()
+    read_excel()
